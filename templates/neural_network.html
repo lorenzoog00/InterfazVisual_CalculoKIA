@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Neuronal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Red Neuronal</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas Absorption Variables</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>DTI of CO2 Absorption Process</h1>
+        <h1>DTI of CO2 Absorption Process</h1>
+        <h1>DTI of CO2 Absorption Process</h1>
+
+        <img src="{{ url_for('static', filename='DTI.png') }}" alt="DTI of CO2 Absorption Process" class="header-image">
+        <h1>DTI of CO2 Absorption Process</h1>
+
+        <img src="{{ url_for('static', filename='DTI.png') }}" alt="DTI of CO2 Absorption Process" class="header-image">
+        <h1>Needed Inputs for the prediction of kGa</h1>
+        <form action="/calculate" method="POST">
+            <div class="form-group">
+                <div class="column">
+                    <label for="co2_concentration">CO2 Concentration (vol. %):</label>
+                    <input type="text" id="co2_concentration" name="co2_concentration">
+                    
+                    <label for="air_flow">Air Flow (LPM):</label>
+                    <input type="text" id="air_flow" name="air_flow">
+                    
+                    <label for="co2_flow">CO2 Flow (LPM):</label>
+                    <input type="text" id="co2_flow" name="co2_flow">
+                    
+                    <label for="total_gas_flow">Total Gas Stream Flow (LPM):</label>
+                    <input type="text" id="total_gas_flow" name="total_gas_flow">
+                    
+                    <label for="mass_concentration">Mass Concentration (MEA-H2O) (%WT):</label>
+                    <input type="text" id="mass_concentration" name="mass_concentration">
+                    
+                    <label for="operating_pressure">Operating Pressure (atm):</label>
+                    <input type="text" id="operating_pressure" name="operating_pressure">
+                    
+                    <label for="column_diameter">Column Diameter (m):</label>
+                    <input type="text" id="column_diameter" name="column_diameter">
+                </div>
+                <div class="column">
+                    <label for="packing_type">Packing Type:</label>
+                    <input type="text" id="packing_type" name="packing_type">
+                    
+                    <label for="packed_section_height">Packed Section Height (m):</label>
+                    <input type="text" id="packed_section_height" name="packed_section_height">
+                    
+                    <label for="gas_flow_temperature">Gas Flow Temperature (°C):</label>
+                    <input type="text" id="gas_flow_temperature" name="gas_flow_temperature">
+                    
+                    <label for="solution_temperature">Solution Temperature (°C):</label>
+                    <input type="text" id="solution_temperature" name="solution_temperature">
+                    
+                    <label for="co2_in_solution_in">CO2 Concentration in Inlet Absorbent Solution (mol CO2 / mol MEA):</label>
+                    <input type="text" id="co2_in_solution_in" name="co2_in_solution_in">
+                    
+                    <label for="co2_in_solution_out">CO2 Concentration in Outlet Absorbent Solution (mol CO2 / mol MEA):</label>
+                    <input type="text" id="co2_in_solution_out" name="co2_in_solution_out">
+                    
+                    <label for="absorbent_flow">Inlet Absorbent Solution Flow (mL/min):</label>
+                    <input type="text" id="absorbent_flow" name="absorbent_flow">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="correlation">Correlation:</label>
+                <select id="correlation" name="correlation">
+                    <option value="cornell">Cornell</option>
+                    <option value="shulman">Shulman</option>
+                    <option value="onda">Onda</option>
+                </select>
+            </div>
+            <div class="form-group result">
+                <label for="kga">kGa:</label>
+                <input type="text" id="kga" name="kga" placeholder="Calculated value">
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

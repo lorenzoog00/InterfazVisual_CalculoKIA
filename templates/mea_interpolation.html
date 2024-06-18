@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interpolación de Datos de MEA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Interpolación de Datos de MEA</h1>
+        <form method="POST">
+            <div class="form-group">
+                <div class="column">
+                    <label for="concentration">Concentración de MEA (%)</label>
+                    <input type="number" id="concentration" name="concentration" step="0.1" min="6" max="30" required>
+                </div>
+                <div class="column">
+                    <label for="temperature">Temperatura (°C)</label>
+                    <input type="number" id="temperature" name="temperature" step="0.1" min="0" required>
+                </div>
+            </div>
+            <button type="submit">Graficar</button>
+        </form>
+        
+        {% if plot_url %}
+            <div class="result">
+                <h2>Resultado</h2>
+                <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de equilibrio">
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
