@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interpolación de Datos de MEA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .legend {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -17,8 +41,12 @@
                 </div>
                 <div class="column">
                     <label for="temperature">Temperatura (°C)</label>
-                    <input type="number" id="temperature" name="temperature" step="0.1" min="0" required>
+                    <input type="number" id="temperature" name="temperature" step="0.1" min="20" max="40" required>
                 </div>
+            </div>
+            <div class="legend">
+                <p>Rango de concentración de MEA: 6% - 30%</p>
+                <p>Rango de temperatura: 20°C - 40°C</p>
             </div>
             <button type="submit">Graficar</button>
         </form>
@@ -27,6 +55,9 @@
             <div class="result">
                 <h2>Resultado</h2>
                 <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de equilibrio">
+                <br>
+                <a href="{{ url_for('download_csv', concentration=concentration, temperature=temperature, x=x, y=y) }}" class="btn">Descargar CSV</a>
+                <a href="{{ url_for('download_txt', concentration=concentration, temperature=temperature, x=x, y=y) }}" class="btn">Descargar TXT</a>
             </div>
         {% endif %}
     </div>

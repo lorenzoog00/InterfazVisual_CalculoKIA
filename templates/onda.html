@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcular kGA</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .input-label {
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .input-container {
+            position: relative;
+            margin-bottom: 1.5em;
+        }
+        .input-number {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 50%;
+            display: inline-block;
+            text-align: center;
+            line-height: 50px;
+            background-color: #007bff;
+            color: white;
+            margin-right: 15px;
+        }
+        .form-control {
+            font-size: 0.9em;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            flex: 1;
+        }
+        .form-group .form-control {
+            flex: 2;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .column {
+            flex: 50%;
+            padding: 0 15px;
+        }
+        .btn-submit {
+            font-size: 1.5em;
+            padding: 10px 20px;
+            display: block;
+            width: 100%;
+        }
+        .formula {
+            font-size: 1.2em;
+            font-style: italic;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .source-link {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Calcular kGA usando la ecuación de Onda</h1>
+        <div class="text-center mb-4">
+            <img src="/static/onda.png" alt="Ecuación de Onda" class="img-fluid">
+        </div>
+        <div class="source-link">
+            Fuente: <a href="https://drive.google.com/file/d/1q2LG-bpWQlKBMF-8jtk4iKamWCj7p4oq/view?usp=sharing" target="_blank">haga click aquí</a>
+        </div>
+        <form action="/calcular" method="post">
+            <div class="row">
+                <div class="column">
+                    <div class="form-group">
+                        <span class="input-number">1</span>
+                        <div>
+                            <label for="a" class="input-label">a (m<sup>2</sup>)</label>
+                            <input type="number" step="any" class="form-control" id="a" name="a" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-number">2</span>
+                        <div>
+                            <label for="R" class="input-label">R (bar m<sup>3</sup>/kmol K)</label>
+                            <input type="number" step="any" class="form-control" id="R" name="R" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-number">3</span>
+                        <div>
+                            <label for="T" class="input-label">T (K)</label>
+                            <input type="number" step="any" class="form-control" id="T" name="T" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-number">4</span>
+                        <div>
+                            <label for="D_v" class="input-label">D<sub>v</sub> (m<sup>2</sup>/s)</label>
+                            <input type="number" step="any" class="form-control" id="D_v" name="D_v" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-number">5</span>
+                        <div>
+                            <label for="K5" class="input-label">K5</label>
+                            <input type="number" step="any" class="form-control" id="K5" name="K5" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="form-group">
+                        <span class="input-number">6</span>
+                        <div>
+                            <label for="V_w" class="input-label">V<sub>w</sub> (kg/m<sup>2</sup>s)</label>
+                            <input type="number" step="any" class="form-control" id="V_w" name="V_w" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-number">7</span>
+                        <div>
+                            <label for="mu_v" class="input-label">μ<sub>v</sub> (Ns/m<sup>2</sup>)</label>
+                            <input type="number" step="any" class="form-control" id="mu_v" name="mu_v" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-number">8</span>
+                        <div>
+                            <label for="rho_v" class="input-label">ρ<sub>v</sub> (kg/m<sup>3</sup>)</label>
+                            <input type="number" step="any" class="form-control" id="rho_v" name="rho_v" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="input-number">9</span>
+                        <div>
+                            <label for="d_p" class="input-label">d<sub>p</sub> (m)</label>
+                            <input type="number" step="any" class="form-control" id="d_p" name="d_p" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-submit mt-3">Calcular kGA</button>
+        </form>
+    </div>
+</body>
+</html>

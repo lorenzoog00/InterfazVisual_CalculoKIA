@@ -3,90 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Red Neuronal</title>
+    <title>Neural Network</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .image {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        .button-group {
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Red Neuronal</h1>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gas Absorption Variables</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>DTI of CO2 Absorption Process</h1>
-        <h1>DTI of CO2 Absorption Process</h1>
-        <h1>DTI of CO2 Absorption Process</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
+        <h1>Neural Network</h1>
 
-        <img src="{{ url_for('static', filename='DTI.png') }}" alt="DTI of CO2 Absorption Process" class="header-image">
-        <h1>DTI of CO2 Absorption Process</h1>
 
-        <img src="{{ url_for('static', filename='DTI.png') }}" alt="DTI of CO2 Absorption Process" class="header-image">
-        <h1>Needed Inputs for the prediction of kGa</h1>
-        <form action="/calculate" method="POST">
-            <div class="form-group">
-                <div class="column">
-                    <label for="co2_concentration">CO2 Concentration (vol. %):</label>
-                    <input type="text" id="co2_concentration" name="co2_concentration">
-                    
-                    <label for="air_flow">Air Flow (LPM):</label>
-                    <input type="text" id="air_flow" name="air_flow">
-                    
-                    <label for="co2_flow">CO2 Flow (LPM):</label>
-                    <input type="text" id="co2_flow" name="co2_flow">
-                    
-                    <label for="total_gas_flow">Total Gas Stream Flow (LPM):</label>
-                    <input type="text" id="total_gas_flow" name="total_gas_flow">
-                    
-                    <label for="mass_concentration">Mass Concentration (MEA-H2O) (%WT):</label>
-                    <input type="text" id="mass_concentration" name="mass_concentration">
-                    
-                    <label for="operating_pressure">Operating Pressure (atm):</label>
-                    <input type="text" id="operating_pressure" name="operating_pressure">
-                    
-                    <label for="column_diameter">Column Diameter (m):</label>
-                    <input type="text" id="column_diameter" name="column_diameter">
-                </div>
-                <div class="column">
-                    <label for="packing_type">Packing Type:</label>
-                    <input type="text" id="packing_type" name="packing_type">
-                    
-                    <label for="packed_section_height">Packed Section Height (m):</label>
-                    <input type="text" id="packed_section_height" name="packed_section_height">
-                    
-                    <label for="gas_flow_temperature">Gas Flow Temperature (°C):</label>
-                    <input type="text" id="gas_flow_temperature" name="gas_flow_temperature">
-                    
-                    <label for="solution_temperature">Solution Temperature (°C):</label>
-                    <input type="text" id="solution_temperature" name="solution_temperature">
-                    
-                    <label for="co2_in_solution_in">CO2 Concentration in Inlet Absorbent Solution (mol CO2 / mol MEA):</label>
-                    <input type="text" id="co2_in_solution_in" name="co2_in_solution_in">
-                    
-                    <label for="co2_in_solution_out">CO2 Concentration in Outlet Absorbent Solution (mol CO2 / mol MEA):</label>
-                    <input type="text" id="co2_in_solution_out" name="co2_in_solution_out">
-                    
-                    <label for="absorbent_flow">Inlet Absorbent Solution Flow (mL/min):</label>
-                    <input type="text" id="absorbent_flow" name="absorbent_flow">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="correlation">Correlation:</label>
-                <select id="correlation" name="correlation">
-                    <option value="cornell">Cornell</option>
-                    <option value="shulman">Shulman</option>
-                    <option value="onda">Onda</option>
-                </select>
-            </div>
-            <div class="form-group result">
-                <label for="kga">kGa:</label>
-                <input type="text" id="kga" name="kga" placeholder="Calculated value">
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+        <h1>Cálculo Coeficiente de transferencia de masa</h1>
+
+        <img src="{{ url_for('static', filename='DTI.png') }}" alt="Neural Network Image" class="image">
+        <div class="intro-text">
+            <h2>Estimación del Coeficiente de Transferencia de Masa en Gas (k<sub>G</sub>a): Métodos y Enfoques</h2>
+            <p>
+                El coeficiente k<sub>G</sub>a es un parámetro crucial en procesos de transferencia de masa gas-líquido, como la absorción.
+                Esta página web te ofrece diversas herramientas para su cálculo:
+            </p>
+            <h3>Correlaciones Clásicas:</h3>
+            <ul>
+                <li><b>Shulman:</b> Ideal para sistemas con líquidos no viscosos y gases poco solubles.</li>
+                <li><b>Cornell:</b> Adecuada para columnas de absorción con diversos tipos de empaques.</li>
+                <li><b>Onda:</b> Considera la influencia de la viscosidad del líquido y es útil para columnas de pared mojada.</li>
+            </ul>
+            <h3>Red Neuronal (LOU):</h3>
+            <p>
+                Modelo avanzado entrenado con datos experimentales de la columna de absorción del Laboratorio de Operaciones Unitarias (LOU) de la Universidad de Morelos.
+                Ofrece predicciones precisas basadas en condiciones específicas.
+            </p>
+        </div>
+
+        <div class="button-group">
+            <a href="{{ url_for('cornell') }}" class="btn">Cornell</a>
+            <a href="{{ url_for('shulman') }}" class="btn">Shulman</a>
+            <a href="{{ url_for('onda') }}" class="btn">Onda</a>
+            <a href="{{ url_for('ann') }}" class="btn">ANN</a>
+        </div>
     </div>
 </body>
 </html>

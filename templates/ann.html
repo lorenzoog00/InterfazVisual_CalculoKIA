@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculation Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
+        }
+        .field {
+            margin-bottom: 10px;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .field input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .button {
+            width: 100%;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: darkgreen;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .units {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="calcForm">
+            <div class="field">
+                <label for="y1">y1:</label>
+                <input type="number" id="y1" name="y1" required>
+            </div>
+            <div class="field">
+                <label for="G_">G_:</label>
+                <input type="number" id="G_" name="G_" required>
+            </div>
+            <div class="field">
+                <label for="wt_mea">wt_mea:</label>
+                <input type="number" id="wt_mea" name="wt_mea" required>
+            </div>
+            <div class="field">
+                <label for="z">z:</label>
+                <input type="number" id="z" name="z" required>
+            </div>
+            <div class="field">
+                <label for="T_gas">T_gas:</label>
+                <input type="number" id="T_gas" name="T_gas" required>
+            </div>
+            <div class="field">
+                <label for="L_">L_:</label>
+                <input type="number" id="L_" name="L_" required>
+            </div>
+            <button type="button" class="button" onclick="calculate()">Calcular</button>
+        </form>
+        <div id="result" class="result-box">
+            kga: <span id="kgaValue"></span> <span class="units">KGA (mol/m²*s*kPa)</span>
+        </div>
+    </div>
+    <script>
+        function calculate() {
+            // Example calculation logic, you can replace it with your own
+            let y1 = parseFloat(document.getElementById('y1').value);
+            let G_ = parseFloat(document.getElementById('G_').value);
+            let wt_mea = parseFloat(document.getElementById('wt_mea').value);
+            let z = parseFloat(document.getElementById('z').value);
+            let T_gas = parseFloat(document.getElementById('T_gas').value);
+            let L_ = parseFloat(document.getElementById('L_').value);
+
+            let kga = (y1 + G_ + wt_mea + z + T_gas + L_) / 6; // Dummy calculation
+            document.getElementById('kgaValue').innerText = kga.toFixed(2);
+        }
+    </script>
+</body>
+</html>

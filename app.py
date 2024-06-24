@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, send_file
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import io
+from onda import calcular_kg
 import base64
+import os
 
 # Configurar matplotlib para usar el backend 'Agg'
 plt.switch_backend('Agg')
@@ -82,6 +84,38 @@ def index():
 def neural_network():
     return render_template('neural_network.html')
 
+@app.route('/cornell')
+def cornell():
+    return render_template('cornell.html')
+
+@app.route('/shulman')
+def shulman():
+    return render_template('shulman.html')
+
+@app.route('/onda')
+def onda():
+    return render_template('onda.html')
+
+@app.route('/calcular', methods=['POST'])
+def calcular():
+    a = float(request.form['a'])
+    R = float(request.form['R'])
+    T = float(request.form['T'])
+    D_v = float(request.form['D_v'])
+    K5 = float(request.form['K5'])
+    V_w = float(request.form['V_w'])
+    mu_v = float(request.form['mu_v'])
+    rho_v = float(request.form['rho_v'])
+    d_p = float(request.form['d_p'])
+
+    kga = calcular_kg(a, R, T, D_v, K5, V_w, mu_v, rho_v, d_p)
+    
+    return render_template('resultado.html', kga=kga)
+
+@app.route('/ann')
+def ann():
+    return render_template('ann.html')
+
 @app.route('/mea_interpolation', methods=['GET', 'POST'])
 def mea_interpolation():
     if request.method == 'POST':
@@ -91,10 +125,10 @@ def mea_interpolation():
             
             x, y = interpolate(concentration, temp)
             
-            # Crear la gráfica
+            # Esas son las variables x e y que quiero importar
             plt.figure()
             plt.plot(y, x, '-o', label='Curva de equilibrio')
-            plt.xlabel('Concentración (% MEA)')
+            plt.xlabel('X Relación Molar')
             plt.ylabel('Y Relación Molar')
             plt.title(f'Equilibrio de concentración de MEA a {concentration}% y {temp}°C')
             plt.legend()
@@ -106,11 +140,36 @@ def mea_interpolation():
             plot_url = base64.b64encode(img.getvalue()).decode()
             plt.close()
 
-            return render_template('mea_interpolation.html', plot_url=plot_url, concentration=concentration, temperature=temp, interpolated_value=y)
+            return render_template('mea_interpolation.html', plot_url=plot_url, concentration=concentration, temperature=temp, x=x, y=y)
         except Exception as e:
             return render_template('mea_interpolation.html', error=str(e))
 
     return render_template('mea_interpolation.html')
+
+@app.route('/download/csv')
+def download_csv():
+    concentration = request.args.get('concentration')
+    temp = request.args.get('temperature')
+    x = request.args.getlist('x', type=float)
+    y = request.args.getlist('y', type=float)
+    
+    file_path = f'tem_{temp}_conc_{concentration}.csv'
+    df = pd.DataFrame({'Y Relación Molar': y, 'X Relación Molar': x})
+    df.to_csv(file_path, index=False)
+    return send_file(file_path, as_attachment=True, mimetype='text/csv')
+
+@app.route('/download/txt')
+def download_txt():
+    concentration = request.args.get('concentration')
+    temp = request.args.get('temperature')
+    x = request.args.getlist('x', type=float)
+    y = request.args.getlist('y', type=float)
+    
+    file_path = f'tem_{temp}_conc_{concentration}.txt'
+    with open(file_path, 'w') as f:
+        for xi, yi in zip(x, y):
+            f.write(f"{yi}\t{xi}\n")
+    return send_file(file_path, as_attachment=True, mimetype='text/plain')
 
 if __name__ == '__main__':
     app.run(debug=True)
