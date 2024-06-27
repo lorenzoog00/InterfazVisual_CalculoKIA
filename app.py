@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, jsonify
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,11 +6,19 @@ import io
 from onda import calcular_kg
 import base64
 import os
+import joblib
+import tensorflow as tf
+from tensorflow.keras.models import load_model
 
 # Configurar matplotlib para usar el backend 'Agg'
 plt.switch_backend('Agg')
 
 app = Flask(__name__)
+
+# Load the scaler and model
+scaler_X = joblib.load('minmax_scaler_X.pkl')
+scaler_y = joblib.load('minmax_scaler_y.pkl')
+model = load_model('best_model_3.1808540978988254e-05.h5')
 
 # Cargar datos del archivo Excel
 data = pd.read_excel('matriz_datos.xlsx', sheet_name='SOLO DATOS')
@@ -112,8 +120,34 @@ def calcular():
     
     return render_template('resultado.html', kga=kga)
 
-@app.route('/ann')
+
+@app.route('/ann', methods=['GET', 'POST'])
 def ann():
+    if request.method == 'POST':
+        # Extract data from form
+        y1 = float(request.form['y1'])
+        G_ = float(request.form['G_'])
+        wt_mea = float(request.form['wt_mea'])
+        z = float(request.form['z'])
+        T_gas = float(request.form['T_gas'])
+        L_ = float(request.form['L_'])
+        
+        # Create a DataFrame for the inputs
+        input_data = pd.DataFrame([[y1, G_, wt_mea, z, T_gas, L_]], columns=['y1', 'G_', 'wt_mea', 'z', 'T_gas', 'L_'])
+        
+        # Normalize the input data
+        input_data_normalized = scaler_X.transform(input_data)
+        
+        # Predict using the loaded model
+        prediction_normalized = model.predict(input_data_normalized)
+        
+        # Inverse transform the prediction to get the original scale
+        prediction = scaler_y.inverse_transform(prediction_normalized)
+        kga = float(prediction[0][0])  # Convert to native float
+        
+        # Return the result
+        return render_template('ann.html', kga=kga)
+    
     return render_template('ann.html')
 
 @app.route('/mea_interpolation', methods=['GET', 'POST'])

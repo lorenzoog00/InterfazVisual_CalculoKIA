@@ -7,45 +7,56 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
         .container {
-            width: 300px;
-            margin: 0 auto;
+            width: 400px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 10px;
             box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
+            background-color: #fff;
         }
         .field {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         .field label {
             display: block;
             margin-bottom: 5px;
+            font-weight: bold;
         }
         .field input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         .button {
             width: 100%;
-            padding: 10px;
-            background-color: green;
+            padding: 12px;
+            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
         .button:hover {
-            background-color: darkgreen;
+            background-color: #45a049;
         }
         .result-box {
             margin-top: 20px;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
+            text-align: center;
         }
         .units {
             font-weight: bold;
@@ -54,50 +65,38 @@
 </head>
 <body>
     <div class="container">
-        <form id="calcForm">
+        <form id="calcForm" action="/ann" method="post">
             <div class="field">
                 <label for="y1">y1:</label>
-                <input type="number" id="y1" name="y1" required>
+                <input type="number" id="y1" name="y1" step="any" required>
             </div>
             <div class="field">
                 <label for="G_">G_:</label>
-                <input type="number" id="G_" name="G_" required>
+                <input type="number" id="G_" name="G_" step="any" required>
             </div>
             <div class="field">
                 <label for="wt_mea">wt_mea:</label>
-                <input type="number" id="wt_mea" name="wt_mea" required>
+                <input type="number" id="wt_mea" name="wt_mea" step="any" required>
             </div>
             <div class="field">
                 <label for="z">z:</label>
-                <input type="number" id="z" name="z" required>
+                <input type="number" id="z" name="z" step="any" required>
             </div>
             <div class="field">
                 <label for="T_gas">T_gas:</label>
-                <input type="number" id="T_gas" name="T_gas" required>
+                <input type="number" id="T_gas" name="T_gas" step="any" required>
             </div>
             <div class="field">
                 <label for="L_">L_:</label>
-                <input type="number" id="L_" name="L_" required>
+                <input type="number" id="L_" name="L_" step="any" required>
             </div>
-            <button type="button" class="button" onclick="calculate()">Calcular</button>
+            <button type="submit" class="button">Calcular</button>
         </form>
+        {% if kga is not none %}
         <div id="result" class="result-box">
-            kga: <span id="kgaValue"></span> <span class="units">KGA (mol/m²*s*kPa)</span>
+            kG: <span id="kgaValue">{{ kga }}</span> <span class="units">KGA (mol/m²*s*kPa)</span>
         </div>
+        {% endif %}
     </div>
-    <script>
-        function calculate() {
-            // Example calculation logic, you can replace it with your own
-            let y1 = parseFloat(document.getElementById('y1').value);
-            let G_ = parseFloat(document.getElementById('G_').value);
-            let wt_mea = parseFloat(document.getElementById('wt_mea').value);
-            let z = parseFloat(document.getElementById('z').value);
-            let T_gas = parseFloat(document.getElementById('T_gas').value);
-            let L_ = parseFloat(document.getElementById('L_').value);
-
-            let kga = (y1 + G_ + wt_mea + z + T_gas + L_) / 6; // Dummy calculation
-            document.getElementById('kgaValue').innerText = kga.toFixed(2);
-        }
-    </script>
 </body>
 </html>
