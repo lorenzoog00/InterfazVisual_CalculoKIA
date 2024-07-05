@@ -3,25 +3,25 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import io
-from onda import calcular_kg
 import base64
 import os
 import joblib
 import tensorflow as tf
 from tensorflow.keras.models import load_model
-
-# Configurar matplotlib para usar el backend 'Agg'
-plt.switch_backend('Agg')
+from onda import calcular_kG_principal
 
 app = Flask(__name__)
 
 # Load the scaler and model
 scaler_X = joblib.load('minmax_scaler_X.pkl')
 scaler_y = joblib.load('minmax_scaler_y.pkl')
-model = load_model('best_model_3.1808540978988254e-05.h5')
+model = load_model('best_model_2.4367305027108534e-05.h5')
 
 # Cargar datos del archivo Excel
 data = pd.read_excel('matriz_datos.xlsx', sheet_name='SOLO DATOS')
+
+# Cargar datos de empaques
+designed_data_for_various_packing = pd.read_excel('design_data_for_various_packings.xlsx')
 
 def find_mea_range(mea_value, data):
     mea_concentrations = data['MEA wt%'].unique()
@@ -102,22 +102,25 @@ def shulman():
 
 @app.route('/onda')
 def onda():
-    return render_template('onda.html')
+    materiales = designed_data_for_various_packing['Material'].unique().tolist()
+    return render_template('onda.html', materiales=materiales)
+
+@app.route('/get_sizes', methods=['POST'])
+def get_sizes():
+    material = request.json['material']
+    sizes = designed_data_for_various_packing[designed_data_for_various_packing['Material'] == material]['Size (in.)'].unique().tolist()
+    return jsonify(sizes)
 
 @app.route('/calcular', methods=['POST'])
 def calcular():
-    a = float(request.form['a'])
-    R = float(request.form['R'])
+    material = request.form['material']
+    size_in = float(request.form['size_in'])
     T = float(request.form['T'])
-    D_v = float(request.form['D_v'])
+    flujo_masico = float(request.form['flujo_masico'])
+    y1 = float(request.form['y1'])
     K5 = float(request.form['K5'])
-    V_w = float(request.form['V_w'])
-    mu_v = float(request.form['mu_v'])
-    rho_v = float(request.form['rho_v'])
-    d_p = float(request.form['d_p'])
 
-    kga = calcular_kg(a, R, T, D_v, K5, V_w, mu_v, rho_v, d_p)
-    
+    kga = calcular_kG_principal(material, size_in, T, flujo_masico, y1, K5)
     return render_template('resultado.html', kga=kga)
 
 

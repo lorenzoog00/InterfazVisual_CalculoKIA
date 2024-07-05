@@ -66,6 +66,7 @@
             margin-bottom: 20px;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
@@ -82,15 +83,21 @@
                     <div class="form-group">
                         <span class="input-number">1</span>
                         <div>
-                            <label for="a" class="input-label">a (m<sup>2</sup>)</label>
-                            <input type="number" step="any" class="form-control" id="a" name="a" required>
+                            <label for="material" class="input-label">Material</label>
+                            <select class="form-control" id="material" name="material" required>
+                                {% for material in materiales %}
+                                    <option value="{{ material }}">{{ material }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <span class="input-number">2</span>
                         <div>
-                            <label for="R" class="input-label">R (bar m<sup>3</sup>/kmol K)</label>
-                            <input type="number" step="any" class="form-control" id="R" name="R" required>
+                            <label for="size_in" class="input-label">Size (in.)</label>
+                            <select class="form-control" id="size_in" name="size_in" required>
+                                <!-- Opciones serán cargadas dinámicamente -->
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -100,48 +107,27 @@
                             <input type="number" step="any" class="form-control" id="T" name="T" required>
                         </div>
                     </div>
+                </div>
+                <div class="column">
                     <div class="form-group">
                         <span class="input-number">4</span>
                         <div>
-                            <label for="D_v" class="input-label">D<sub>v</sub> (m<sup>2</sup>/s)</label>
-                            <input type="number" step="any" class="form-control" id="D_v" name="D_v" required>
+                            <label for="flujo_masico" class="input-label">Flujo másico (kg/s)</label>
+                            <input type="number" step="any" class="form-control" id="flujo_masico" name="flujo_masico" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <span class="input-number">5</span>
                         <div>
-                            <label for="K5" class="input-label">K5</label>
-                            <input type="number" step="any" class="form-control" id="K5" name="K5" required>
+                            <label for="y1" class="input-label">Fracción molar de CO<sub>2</sub></label>
+                            <input type="number" step="any" class="form-control" id="y1" name="y1" required>
                         </div>
                     </div>
-                </div>
-                <div class="column">
                     <div class="form-group">
                         <span class="input-number">6</span>
                         <div>
-                            <label for="V_w" class="input-label">V<sub>w</sub> (kg/m<sup>2</sup>s)</label>
-                            <input type="number" step="any" class="form-control" id="V_w" name="V_w" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <span class="input-number">7</span>
-                        <div>
-                            <label for="mu_v" class="input-label">μ<sub>v</sub> (Ns/m<sup>2</sup>)</label>
-                            <input type="number" step="any" class="form-control" id="mu_v" name="mu_v" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <span class="input-number">8</span>
-                        <div>
-                            <label for="rho_v" class="input-label">ρ<sub>v</sub> (kg/m<sup>3</sup>)</label>
-                            <input type="number" step="any" class="form-control" id="rho_v" name="rho_v" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <span class="input-number">9</span>
-                        <div>
-                            <label for="d_p" class="input-label">d<sub>p</sub> (m)</label>
-                            <input type="number" step="any" class="form-control" id="d_p" name="d_p" required>
+                            <label for="K5" class="input-label">K5</label>
+                            <input type="number" step="any" class="form-control" id="K5" name="K5" required>
                         </div>
                     </div>
                 </div>
@@ -149,5 +135,24 @@
             <button type="submit" class="btn btn-primary btn-submit mt-3">Calcular kGA</button>
         </form>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#material').change(function() {
+                var material = $(this).val();
+                $.ajax({
+                    url: '/get_sizes',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ material: material }),
+                    success: function(response) {
+                        $('#size_in').empty();
+                        response.forEach(function(size) {
+                            $('#size_in').append('<option value="' + size + '">' + size + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
