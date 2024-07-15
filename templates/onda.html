@@ -3,153 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcular kGA</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .input-label {
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-        .input-container {
-            position: relative;
-            margin-bottom: 1.5em;
-        }
-        .input-number {
-            width: 50px;
-            height: 50px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 50%;
-            display: inline-block;
-            text-align: center;
-            line-height: 50px;
-            background-color: #007bff;
-            color: white;
-            margin-right: 15px;
-        }
-        .form-control {
-            font-size: 0.9em;
-        }
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .form-group label {
-            flex: 1;
-        }
-        .form-group .form-control {
-            flex: 2;
-        }
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .column {
-            flex: 50%;
-            padding: 0 15px;
-        }
-        .btn-submit {
-            font-size: 1.5em;
-            padding: 10px 20px;
-            display: block;
-            width: 100%;
-        }
-        .formula {
-            font-size: 1.2em;
-            font-style: italic;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .source-link {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <title>k<sub>G</sub>a Calculation - Onda Equation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Calcular kGA usando la ecuación de Onda</h1>
-        <div class="text-center mb-4">
-            <img src="/static/onda.png" alt="Ecuación de Onda" class="img-fluid">
-        </div>
-        <div class="source-link">
-            Fuente: <a href="https://drive.google.com/file/d/1q2LG-bpWQlKBMF-8jtk4iKamWCj7p4oq/view?usp=sharing" target="_blank">haga click aquí</a>
-        </div>
-        <form action="/calcular" method="post">
-            <div class="row">
-                <div class="column">
+    <div class="container">
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('neural_network') }}">k<sub>G</sub>a Methods</a></li>
+                <li><a href="{{ url_for('mea_interpolation') }}">MEA Interpolation</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1>k<sub>G</sub>a Calculation using Onda Equation</h1>
+            <p class="subtitle">Advanced method for mass transfer coefficient estimation</p>
+        </header>
+        <main>
+            <section class="equation-display">
+                <img src="{{ url_for('static', filename='onda.png') }}" alt="Onda Equation" class="equation-image">
+                <p class="source-link">Source: <a href="https://drive.google.com/file/d/1q2LG-bpWQlKBMF-8jtk4iKamWCj7p4oq/view?usp=sharing" target="_blank">Reference Document</a></p>
+            </section>
+            <form action="{{ url_for('onda') }}" method="post" class="calculation-form">
+                <div class="form-grid">
                     <div class="form-group">
-                        <span class="input-number">1</span>
-                        <div>
-                            <label for="material" class="input-label">Material</label>
-                            <select class="form-control" id="material" name="material" required>
-                                {% for material in materiales %}
-                                    <option value="{{ material }}">{{ material }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        <label for="material">Packing Material:</label>
+                        <select id="material" name="material" required>
+                            {% for material in materiales %}
+                                <option value="{{ material }}">{{ material }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="form-group">
-                        <span class="input-number">2</span>
-                        <div>
-                            <label for="size_in" class="input-label">Size (in.)</label>
-                            <select class="form-control" id="size_in" name="size_in" required>
-                                <!-- Opciones serán cargadas dinámicamente -->
-                            </select>
-                        </div>
+                        <label for="size">Packing Size (inches):</label>
+                        <select id="size" name="size" required>
+                            <!-- Options will be populated dynamically -->
+                        </select>
                     </div>
                     <div class="form-group">
-                        <span class="input-number">3</span>
-                        <div>
-                            <label for="T" class="input-label">T (K)</label>
-                            <input type="number" step="any" class="form-control" id="T" name="T" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="form-group">
-                        <span class="input-number">4</span>
-                        <div>
-                            <label for="flujo_masico" class="input-label">Flujo másico (kg/s)</label>
-                            <input type="number" step="any" class="form-control" id="flujo_masico" name="flujo_masico" required>
-                        </div>
+                        <label for="temperature">Temperature (K):</label>
+                        <input type="number" id="temperature" name="temperature" step="0.1" required>
                     </div>
                     <div class="form-group">
-                        <span class="input-number">5</span>
-                        <div>
-                            <label for="y1" class="input-label">Fracción molar de CO<sub>2</sub></label>
-                            <input type="number" step="any" class="form-control" id="y1" name="y1" required>
-                        </div>
+                        <label for="mass_flow">Mass Flow Rate (kg/s):</label>
+                        <input type="number" id="mass_flow" name="mass_flow" step="0.01" required>
                     </div>
                     <div class="form-group">
-                        <span class="input-number">6</span>
-                        <div>
-                            <label for="K5" class="input-label">K5</label>
-                            <input type="number" step="any" class="form-control" id="K5" name="K5" required>
-                        </div>
+                        <label for="co2_fraction">CO<sub>2</sub> Molar Fraction:</label>
+                        <input type="number" id="co2_fraction" name="co2_fraction" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="k5">K5:</label>
+                        <input type="number" id="k5" name="k5" step="0.01" required>
                     </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-submit mt-3">Calcular kGA</button>
-        </form>
+                <button type="submit">Calculate k<sub>G</sub>a</button>
+            </form>
+        </main>
+        <footer>
+            <p>&copy; 2024 Unit Operations Laboratory, University of Morelos</p>
+        </footer>
     </div>
     <script>
-        $(document).ready(function() {
-            $('#material').change(function() {
-                var material = $(this).val();
-                $.ajax({
-                    url: '/get_sizes',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ material: material }),
-                    success: function(response) {
-                        $('#size_in').empty();
-                        response.forEach(function(size) {
-                            $('#size_in').append('<option value="' + size + '">' + size + '</option>');
-                        });
-                    }
+        document.getElementById('material').addEventListener('change', function() {
+            const material = this.value;
+            fetch('/get_sizes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({material: material}),
+            })
+            .then(response => response.json())
+            .then(sizes => {
+                const sizeSelect = document.getElementById('size');
+                sizeSelect.innerHTML = '';
+                sizes.forEach(size => {
+                    const option = document.createElement('option');
+                    option.value = size;
+                    option.textContent = size;
+                    sizeSelect.appendChild(option);
                 });
             });
         });

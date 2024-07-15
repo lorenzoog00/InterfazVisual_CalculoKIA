@@ -3,13 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shulman</title>
+    <title>k<sub>G</sub>a Calculation - Shulman Method</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Shulman</h1>
-        <p>Contenido para la página Shulman.</p>
+        <header>
+            <h1>k<sub>G</sub>a Calculation using Shulman Method</h1>
+            <p class="subtitle">Ideal for systems with non-viscous liquids and slightly soluble gases</p>
+        </header>
+        <main>
+            <section class="info-section">
+                <h2>Shulman Method</h2>
+                <p>The Shulman method is ideal for systems with non-viscous liquids and slightly soluble gases in absorption columns.</p>
+            </section>
+            <form action="{{ url_for('shulman') }}" method="post" class="calculation-form">
+                <!-- Add form fields here for Shulman method parameters -->
+                <button type="submit">Calculate k<sub>G</sub>a</button>
+            </form>
+            <!-- Add result display section here -->
+        </main>
+        <footer>
+            <p>&copy; 2024 Unit Operations Laboratory, University of Morelos</p>
+        </footer>
     </div>
 </body>
 </html>

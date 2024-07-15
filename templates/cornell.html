@@ -3,13 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cornell</title>
+    <title>k<sub>G</sub>a Calculation - Cornell Method</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Cornell</h1>
-        <p>Contenido para la página Cornell.</p>
+        <header>
+            <h1>k<sub>G</sub>a Calculation using Cornell Method</h1>
+            <p class="subtitle">Empirical correlation for absorption columns</p>
+        </header>
+        <main>
+            <section class="info-section">
+                <h2>Cornell Method</h2>
+                <p>The Cornell method is an empirical correlation used to estimate the mass transfer coefficient in absorption columns with various types of packings.</p>
+            </section>
+            <form action="{{ url_for('cornell') }}" method="post" class="calculation-form">
+                <!-- Add form fields here for Cornell method parameters -->
+                <button type="submit">Calculate k<sub>G</sub>a</button>
+            </form>
+            <!-- Add result display section here -->
+        </main>
+        <footer>
+            <p>&copy; 2024 Unit Operations Laboratory, University of Morelos</p>
+        </footer>
     </div>
 </body>
 </html>

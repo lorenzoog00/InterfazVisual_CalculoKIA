@@ -46,17 +46,13 @@ def interpolate_y_relacion_molar(mea_value, lower_mea, higher_mea, data):
     y_interpolado40 = []
 
     for i in range(len(higher_data)):
-        y1 = lower_data[i]  # X a 25°C de lower_data
-        y2 = higher_data[i]  # X a 25°C de higher_data
-
-        # Fórmula de interpolación lineal
+        y1 = lower_data[i]
+        y2 = higher_data[i]
         y = y1 + ((y2 - y1) / (higher_mea - lower_mea)) * (mea_value - lower_mea)
         y_interpolado.append(y)
 
-        y1_40 = lower_data40[i]  # X a 40 de lower_data
-        y2_40 = higher_data40[i]  # X a 40 de higher_data
-
-        # Fórmula de interpolación lineal
+        y1_40 = lower_data40[i]
+        y2_40 = higher_data40[i]
         y40 = y1_40 + ((y2_40 - y1_40) / (higher_mea - lower_mea)) * (mea_value - lower_mea)
         y_interpolado40.append(y40)
 
@@ -65,13 +61,11 @@ def interpolate_y_relacion_molar(mea_value, lower_mea, higher_mea, data):
 def interpolate_temperature(y_interpolado20, y_interpolado40, temperature, data):
     if temperature > 25:
         y_interpolado = []
-
         for i in range(len(y_interpolado20)):
-            y1 = y_interpolado20[i]  # X a 25°C de lower_data
-            y2 = y_interpolado40[i]  # X a 40°C de higher_data
+            y1 = y_interpolado20[i]
+            y2 = y_interpolado40[i]
             higher_temp = 40
             lower_temp = 25
-            # Fórmula de interpolación lineal
             y = y1 + ((y2 - y1) / (higher_temp - lower_temp)) * (temperature - lower_temp)
             y_interpolado.append(y)
         return y_interpolado
@@ -100,9 +94,19 @@ def cornell():
 def shulman():
     return render_template('shulman.html')
 
-@app.route('/onda')
+@app.route('/onda', methods=['GET', 'POST'])
 def onda():
     materiales = designed_data_for_various_packing['Material'].unique().tolist()
+    if request.method == 'POST':
+        material = request.form['material']
+        size_in = float(request.form['size'])
+        T = float(request.form['temperature'])
+        flujo_masico = float(request.form['mass_flow'])
+        y1 = float(request.form['co2_fraction'])
+        K5 = float(request.form['k5'])
+
+        kga = calcular_kG_principal(material, size_in, T, flujo_masico, y1, K5)
+        return render_template('resultado.html', kga=kga)
     return render_template('onda.html', materiales=materiales)
 
 @app.route('/get_sizes', methods=['POST'])
@@ -111,23 +115,9 @@ def get_sizes():
     sizes = designed_data_for_various_packing[designed_data_for_various_packing['Material'] == material]['Size (in.)'].unique().tolist()
     return jsonify(sizes)
 
-@app.route('/calcular', methods=['POST'])
-def calcular():
-    material = request.form['material']
-    size_in = float(request.form['size_in'])
-    T = float(request.form['T'])
-    flujo_masico = float(request.form['flujo_masico'])
-    y1 = float(request.form['y1'])
-    K5 = float(request.form['K5'])
-
-    kga = calcular_kG_principal(material, size_in, T, flujo_masico, y1, K5)
-    return render_template('resultado.html', kga=kga)
-
-
 @app.route('/ann', methods=['GET', 'POST'])
 def ann():
     if request.method == 'POST':
-        # Extract data from form
         y1 = float(request.form['y1'])
         G_ = float(request.form['G_'])
         wt_mea = float(request.form['wt_mea'])
@@ -135,20 +125,12 @@ def ann():
         T_gas = float(request.form['T_gas'])
         L_ = float(request.form['L_'])
         
-        # Create a DataFrame for the inputs
         input_data = pd.DataFrame([[y1, G_, wt_mea, z, T_gas, L_]], columns=['y1', 'G_', 'wt_mea', 'z', 'T_gas', 'L_'])
-        
-        # Normalize the input data
         input_data_normalized = scaler_X.transform(input_data)
-        
-        # Predict using the loaded model
         prediction_normalized = model.predict(input_data_normalized)
-        
-        # Inverse transform the prediction to get the original scale
         prediction = scaler_y.inverse_transform(prediction_normalized)
-        kga = float(prediction[0][0])  # Convert to native float
+        kga = float(prediction[0][0])
         
-        # Return the result
         return render_template('ann.html', kga=kga)
     
     return render_template('ann.html')
@@ -162,7 +144,6 @@ def mea_interpolation():
             
             x, y = interpolate(concentration, temp)
             
-            # Esas son las variables x e y que quiero importar
             plt.figure()
             plt.plot(y, x, '-o', label='Curva de equilibrio')
             plt.xlabel('X Relación Molar')
@@ -170,7 +151,6 @@ def mea_interpolation():
             plt.title(f'Equilibrio de concentración de MEA a {concentration}% y {temp}°C')
             plt.legend()
             
-            # Convertir la gráfica a una imagen base64
             img = io.BytesIO()
             plt.savefig(img, format='png')
             img.seek(0)

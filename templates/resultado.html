@@ -3,17 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado de kGA</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>k<sub>G</sub>a Calculation Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Resultado de kGA</h1>
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">kGA Calculado:</h4>
-            <p>{{ kga }}</p>
-        </div>
-        <a href="/onda" class="btn btn-primary">Calcular de nuevo</a>
+    <div class="container">
+        <header>
+            <h1>k<sub>G</sub>a Calculation Result</h1>
+            <p class="subtitle">Mass transfer coefficient estimation</p>
+        </header>
+        <main>
+            <section class="result">
+                <h2>Calculated k<sub>G</sub>a:</h2>
+                <div class="result-value">
+                    {{ kga }} <span class="units">mol/(m³·s·Pa)</span>
+                </div>
+                <p class="result-explanation">This value represents the volumetric mass transfer coefficient in the gas phase for the analyzed system.</p>
+            </section>
+            <div class="button-group">
+                <a href="{{ url_for('index') }}" class="button">Back to Home</a>
+                <a href="{{ url_for('onda') }}" class="button">Calculate Again</a>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2024 Unit Operations Laboratory, University of Morelos</p>
+        </footer>
     </div>
 </body>
 </html>

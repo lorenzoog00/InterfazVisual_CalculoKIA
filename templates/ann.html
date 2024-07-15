@@ -3,100 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculation Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            width: 400px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-        .field {
-            margin-bottom: 15px;
-        }
-        .field label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .field input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        .result-box {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            text-align: center;
-        }
-        .units {
-            font-weight: bold;
-        }
-    </style>
+    <title>k<sub>G</sub>a Calculation - ANN Method</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <form id="calcForm" action="/ann" method="post">
-            <div class="field">
-                <label for="y1">y1:</label>
-                <input type="number" id="y1" name="y1" step="any" required>
-            </div>
-            <div class="field">
-                <label for="G_">G_:</label>
-                <input type="number" id="G_" name="G_" step="any" required>
-            </div>
-            <div class="field">
-                <label for="wt_mea">wt_mea:</label>
-                <input type="number" id="wt_mea" name="wt_mea" step="any" required>
-            </div>
-            <div class="field">
-                <label for="z">z:</label>
-                <input type="number" id="z" name="z" step="any" required>
-            </div>
-            <div class="field">
-                <label for="T_gas">T_gas:</label>
-                <input type="number" id="T_gas" name="T_gas" step="any" required>
-            </div>
-            <div class="field">
-                <label for="L_">L_:</label>
-                <input type="number" id="L_" name="L_" step="any" required>
-            </div>
-            <button type="submit" class="button">Calcular</button>
-        </form>
-        {% if kga is not none %}
-        <div id="result" class="result-box">
-            kG: <span id="kgaValue">{{ kga }}</span> <span class="units">KGA (mol/m²*s*kPa)</span>
-        </div>
-        {% endif %}
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('neural_network') }}">k<sub>G</sub>a Methods</a></li>
+                <li><a href="{{ url_for('mea_interpolation') }}">MEA Interpolation</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1>k<sub>G</sub>a Calculation using Artificial Neural Network</h1>
+            <p class="subtitle">Advanced prediction of mass transfer coefficient</p>
+        </header>
+        <main>
+            <section class="info-section">
+                <h2>Artificial Neural Network Method</h2>
+                <p>This tool uses a trained neural network to estimate the gas-side mass transfer coefficient (k<sub>G</sub>a) based on various input parameters. The model has been trained on experimental data from the Unit Operations Laboratory at the University of Morelos.</p>
+            </section>
+            <form action="{{ url_for('ann') }}" method="post" class="calculation-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="y1">CO<sub>2</sub> Molar Fraction in Gas (y<sub>1</sub>):</label>
+                        <input type="number" id="y1" name="y1" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="G_">Gas Flow Rate (G):</label>
+                        <input type="number" id="G_" name="G_" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wt_mea">MEA Concentration (wt%):</label>
+                        <input type="number" id="wt_mea" name="wt_mea" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="z">Packing Height (z):</label>
+                        <input type="number" id="z" name="z" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="T_gas">Gas Temperature (°C):</label>
+                        <input type="number" id="T_gas" name="T_gas" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="L_">Liquid Flow Rate (L):</label>
+                        <input type="number" id="L_" name="L_" step="0.01" required>
+                    </div>
+                </div>
+                <button type="submit">Calculate k<sub>G</sub>a</button>
+            </form>
+            {% if kga is not none %}
+            <section class="result">
+                <h2>Result</h2>
+                <div class="result-value">
+                    k<sub>G</sub>a: <span id="kgaValue">{{ kga }}</span> <span class="units">KGA (mol/m²·s·kPa)</span>
+                </div>
+                <p class="result-explanation">This value represents the volumetric mass transfer coefficient in the gas phase for the analyzed system.</p>
+            </section>
+            {% endif %}
+        </main>
+        <footer>
+            <p>&copy; 2024 Unit Operations Laboratory, University of Morelos</p>
+        </footer>
     </div>
 </body>
 </html>
