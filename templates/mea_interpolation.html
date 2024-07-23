@@ -9,6 +9,13 @@
 </head>
 <body>
     <div class="container">
+        <nav class="main-nav">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('neural_network') }}">k<sub>G</sub>a Methods</a></li>
+                <li><a href="{{ url_for('mea_interpolation') }}">MEA Interpolation</a></li>
+            </ul>
+        </nav>
         <header>
             <h1>MEA Data Interpolation</h1>
             <p class="subtitle">Generate equilibrium curves for MEA-CO<sub>2</sub> systems</p>

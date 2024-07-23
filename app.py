@@ -86,14 +86,6 @@ def index():
 def neural_network():
     return render_template('neural_network.html')
 
-@app.route('/cornell')
-def cornell():
-    return render_template('cornell.html')
-
-@app.route('/shulman')
-def shulman():
-    return render_template('shulman.html')
-
 @app.route('/onda', methods=['GET', 'POST'])
 def onda():
     materiales = designed_data_for_various_packing['Material'].unique().tolist()
@@ -145,10 +137,10 @@ def mea_interpolation():
             x, y = interpolate(concentration, temp)
             
             plt.figure()
-            plt.plot(y, x, '-o', label='Curva de equilibrio')
-            plt.xlabel('X Relación Molar')
-            plt.ylabel('Y Relación Molar')
-            plt.title(f'Equilibrio de concentración de MEA a {concentration}% y {temp}°C')
+            plt.plot(y, x, '-o', label='Equilibrium curve')
+            plt.xlabel('Y Molar Ratio')
+            plt.ylabel('X Molar Ratio')
+            plt.title(f'Equilibrium of MEA concentration at {concentration}% and {temp}°C')
             plt.legend()
             
             img = io.BytesIO()
